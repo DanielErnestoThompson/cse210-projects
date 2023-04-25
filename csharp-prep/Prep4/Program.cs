@@ -13,7 +13,7 @@ class Program {
             input = int.Parse(Console.ReadLine());
             if (input != 0) {
                 numbers.Add(input);
-            }
+    }
         } while (input != 0);
         
         int sum = 0;
