@@ -43,3 +43,18 @@ public class Resume
         }
     }
 }
+
+public class Program
+{
+    public static void Main()
+    {
+        List<Job> jobs = new List<Job>();
+        Job job1 = new Job("Microsoft", "Software Engineer", 2019, 2022);
+        Job job2 = new Job("Apple", "iOS Developer", 2017, 2019);
+        jobs.Add(job1);
+        jobs.Add(job2);
+
+        Resume resume = new Resume("Daniel Thompson", jobs);
+        resume.DisplayResume();
+    }
+}
