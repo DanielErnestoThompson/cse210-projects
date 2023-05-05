@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Xceed.Document.NET;
+using Xceed.Words.NET;
 
 class JournalEntry
 {
@@ -64,6 +66,23 @@ class Journal
             }
         }
     }
+
+    public JournalEntry FindEntryByDate(string date)
+    {
+        return _entries.FirstOrDefault(entry => entry.Date == date);
+    }
+}
+
+class JournalViewer
+{
+    public static void ShowEntryInDocx(JournalEntry entry, string filename)
+    {
+        using (var document = DocX.Create(filename))
+        {
+            document.InsertParagraph($"Date: {entry.Date}\nPrompt: {entry.Prompt}\nResponse: {entry.Response}\n");
+            document.Save();
+        }
+    }
 }
 
 class Program
@@ -100,8 +119,11 @@ class Program
                 case 4:
                     LoadJournal(journal);
                     break;
+                case 5:
+                    ViewEntryInDocx(journal);
+                    break;
             }
-        } while (choice != 5);
+        } while (choice != 6);
     }
 
     static int DisplayMenu()
@@ -110,9 +132,10 @@ class Program
         Console.WriteLine("2. Display the journal");
         Console.WriteLine("3. Save the journal to a file");
         Console.WriteLine("4. Load the journal from a file");
-        Console.WriteLine("5. Exit");
+        Console.WriteLine("5. View entry in a .docx file");
+        Console.WriteLine("6. Exit");
         Console.Write("Choose an option: ");
-        return int.Parse(Console.ReadLine());
+                return int.Parse(Console.ReadLine());
     }
 
     static string GetRandomPrompt()
@@ -140,7 +163,7 @@ class Program
     {
         Console.Write("Enter the filename to save: ");
         string filename = Console.ReadLine();
-                journal.SaveToFile(filename);
+        journal.SaveToFile(filename);
     }
 
     static void LoadJournal(Journal journal)
@@ -154,6 +177,25 @@ class Program
         catch (Exception ex)
         {
             Console.WriteLine("Error loading file: " + ex.Message);
+        }
+    }
+
+    static void ViewEntryInDocx(Journal journal)
+    {
+        Console.Write("Enter the date of the entry you want to view (yyyy-MM-dd): ");
+        string date = Console.ReadLine();
+        JournalEntry entry = journal.FindEntryByDate(date);
+
+        if (entry != null)
+        {
+            Console.Write("Enter the filename to save the entry as a .docx file: ");
+            string filename = Console.ReadLine();
+            JournalViewer.ShowEntryInDocx(entry, filename);
+            Console.WriteLine("Entry saved as a .docx file.");
+        }
+        else
+        {
+            Console.WriteLine("No entry found for the specified date.");
         }
     }
 }
