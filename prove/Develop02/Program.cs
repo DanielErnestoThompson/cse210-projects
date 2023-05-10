@@ -1,202 +1,202 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Xceed.Document.NET;
-using Xceed.Words.NET;
+// using System;
+// using System.Collections.Generic;
+// using System.IO;
+// using System.Linq;
+// using Xceed.Document.NET;
+// using Xceed.Words.NET;
 
-class JournalEntry
-{
-    public string Prompt { get; set; }
-    public string Response { get; set; }
-    public string Date { get; set; }
+// class JournalEntry
+// {
+//     public string Prompt { get; set; }
+//     public string Response { get; set; }
+//     public string Date { get; set; }
 
-    public JournalEntry(string prompt, string response, string date)
-    {
-        Prompt = prompt;
-        Response = response;
-        Date = date;
-    }
-}
+//     public JournalEntry(string prompt, string response, string date)
+//     {
+//         Prompt = prompt;
+//         Response = response;
+//         Date = date;
+//     }
+// }
 
-class Journal
-{
-    private List<JournalEntry> _entries;
+// class Journal
+// {
+//     private List<JournalEntry> _entries;
 
-    public Journal()
-    {
-        _entries = new List<JournalEntry>();
-    }
+//     public Journal()
+//     {
+//         _entries = new List<JournalEntry>();
+//     }
 
-    public void AddEntry(JournalEntry entry)
-    {
-        _entries.Add(entry);
-    }
+//     public void AddEntry(JournalEntry entry)
+//     {
+//         _entries.Add(entry);
+//     }
 
-    public void DisplayEntries()
-    {
-        foreach (var entry in _entries)
-        {
-            Console.WriteLine($"Date: {entry.Date}\nPrompt: {entry.Prompt}\nResponse: {entry.Response}\n");
-        }
-    }
+//     public void DisplayEntries()
+//     {
+//         foreach (var entry in _entries)
+//         {
+//             Console.WriteLine($"Date: {entry.Date}\nPrompt: {entry.Prompt}\nResponse: {entry.Response}\n");
+//         }
+//     }
 
-    public void SaveToFile(string filename)
-    {
-        using (StreamWriter writer = new StreamWriter(filename))
-        {
-            foreach (var entry in _entries)
-            {
-                writer.WriteLine($"{entry.Date}|{entry.Prompt}|{entry.Response}");
-            }
-        }
-    }
+//     public void SaveToFile(string filename)
+//     {
+//         using (StreamWriter writer = new StreamWriter(filename))
+//         {
+//             foreach (var entry in _entries)
+//             {
+//                 writer.WriteLine($"{entry.Date}|{entry.Prompt}|{entry.Response}");
+//             }
+//         }
+//     }
 
-    public void LoadFromFile(string filename)
-    {
-        _entries.Clear();
+//     public void LoadFromFile(string filename)
+//     {
+//         _entries.Clear();
 
-        using (StreamReader reader = new StreamReader(filename))
-        {
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                string[] parts = line.Split('|');
-                AddEntry(new JournalEntry(parts[1], parts[2], parts[0]));
-            }
-        }
-    }
+//         using (StreamReader reader = new StreamReader(filename))
+//         {
+//             string line;
+//             while ((line = reader.ReadLine()) != null)
+//             {
+//                 string[] parts = line.Split('|');
+//                 AddEntry(new JournalEntry(parts[1], parts[2], parts[0]));
+//             }
+//         }
+//     }
 
-    public JournalEntry FindEntryByDate(string date)
-    {
-        return _entries.FirstOrDefault(entry => entry.Date == date);
-    }
-}
+//     public JournalEntry FindEntryByDate(string date)
+//     {
+//         return _entries.FirstOrDefault(entry => entry.Date == date);
+//     }
+// }
 
-class JournalViewer
-{
-    public static void ShowEntryInDocx(JournalEntry entry, string filename)
-    {
-        using (var document = DocX.Create(filename))
-        {
-            document.InsertParagraph($"Date: {entry.Date}\nPrompt: {entry.Prompt}\nResponse: {entry.Response}\n");
-            document.Save();
-        }
-    }
-}
+// class JournalViewer
+// {
+//     public static void ShowEntryInDocx(JournalEntry entry, string filename)
+//     {
+//         using (var document = DocX.Create(filename))
+//         {
+//             document.InsertParagraph($"Date: {entry.Date}\nPrompt: {entry.Prompt}\nResponse: {entry.Response}\n");
+//             document.Save();
+//         }
+//     }
+// }
 
-class Program
-{
-    private static List<string> _prompts = new List<string>
-    {
-        "Who was the most interesting person I interacted with today?",
-        "What was the best part of my day?",
-        "How did I see the hand of the Lord in my life today?",
-        "What was the strongest emotion I felt today?",
-        "If I had one thing I could do over today, what would it be?"
-    };
+// class Program
+// {
+//     private static List<string> _prompts = new List<string>
+//     {
+//         "Who was the most interesting person I interacted with today?",
+//         "What was the best part of my day?",
+//         "How did I see the hand of the Lord in my life today?",
+//         "What was the strongest emotion I felt today?",
+//         "If I had one thing I could do over today, what would it be?"
+//     };
 
-    static void Main(string[] args)
-    {
-        Journal journal = new Journal();
-        int choice;
+//     static void Main(string[] args)
+//     {
+//         Journal journal = new Journal();
+//         int choice;
 
-        do
-        {
-            choice = DisplayMenu();
+//         do
+//         {
+//             choice = DisplayMenu();
 
-            switch (choice)
-            {
-                case 1:
-                    WriteNewEntry(journal);
-                    break;
-                case 2:
-                    DisplayJournal(journal);
-                    break;
-                case 3:
-                    SaveJournal(journal);
-                    break;
-                case 4:
-                    LoadJournal(journal);
-                    break;
-                case 5:
-                    ViewEntryInDocx(journal);
-                    break;
-            }
-        } while (choice != 6);
-    }
+//             switch (choice)
+//             {
+//                 case 1:
+//                     WriteNewEntry(journal);
+//                     break;
+//                 case 2:
+//                     DisplayJournal(journal);
+//                     break;
+//                 case 3:
+//                     SaveJournal(journal);
+//                     break;
+//                 case 4:
+//                     LoadJournal(journal);
+//                     break;
+//                 case 5:
+//                     ViewEntryInDocx(journal);
+//                     break;
+//             }
+//         } while (choice != 6);
+//     }
 
-    static int DisplayMenu()
-    {
-        Console.WriteLine("1. Write a new entry");
-        Console.WriteLine("2. Display the journal");
-        Console.WriteLine("3. Save the journal to a file");
-        Console.WriteLine("4. Load the journal from a file");
-        Console.WriteLine("5. View entry in a .docx file");
-        Console.WriteLine("6. Exit");
-        Console.Write("Choose an option: ");
-                return int.Parse(Console.ReadLine());
-    }
+//     static int DisplayMenu()
+//     {
+//         Console.WriteLine("1. Write a new entry");
+//         Console.WriteLine("2. Display the journal");
+//         Console.WriteLine("3. Save the journal to a file");
+//         Console.WriteLine("4. Load the journal from a file");
+//         Console.WriteLine("5. View entry in a .docx file");
+//         Console.WriteLine("6. Exit");
+//         Console.Write("Choose an option: ");
+//                 return int.Parse(Console.ReadLine());
+//     }
 
-    static string GetRandomPrompt()
-    {
-        Random rand = new Random();
-        int index = rand.Next(_prompts.Count);
-        return _prompts[index];
-    }
+//     static string GetRandomPrompt()
+//     {
+//         Random rand = new Random();
+//         int index = rand.Next(_prompts.Count);
+//         return _prompts[index];
+//     }
 
-    static void WriteNewEntry(Journal journal)
-    {
-        string prompt = GetRandomPrompt();
-        Console.WriteLine(prompt);
-        string response = Console.ReadLine();
-        string date = DateTime.Now.ToString("yyyy-MM-dd");
-        journal.AddEntry(new JournalEntry(prompt, response, date));
-    }
+//     static void WriteNewEntry(Journal journal)
+//     {
+//         string prompt = GetRandomPrompt();
+//         Console.WriteLine(prompt);
+//         string response = Console.ReadLine();
+//         string date = DateTime.Now.ToString("yyyy-MM-dd");
+//         journal.AddEntry(new JournalEntry(prompt, response, date));
+//     }
 
-    static void DisplayJournal(Journal journal)
-    {
-        journal.DisplayEntries();
-    }
+//     static void DisplayJournal(Journal journal)
+//     {
+//         journal.DisplayEntries();
+//     }
 
-    static void SaveJournal(Journal journal)
-    {
-        Console.Write("Enter the filename to save: ");
-        string filename = Console.ReadLine();
-        journal.SaveToFile(filename);
-    }
+//     static void SaveJournal(Journal journal)
+//     {
+//         Console.Write("Enter the filename to save: ");
+//         string filename = Console.ReadLine();
+//         journal.SaveToFile(filename);
+//     }
 
-    static void LoadJournal(Journal journal)
-    {
-        Console.Write("Enter the filename to load: ");
-        string filename = Console.ReadLine();
-        try
-        {
-            journal.LoadFromFile(filename);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Error loading file: " + ex.Message);
-        }
-    }
+//     static void LoadJournal(Journal journal)
+//     {
+//         Console.Write("Enter the filename to load: ");
+//         string filename = Console.ReadLine();
+//         try
+//         {
+//             journal.LoadFromFile(filename);
+//         }
+//         catch (Exception ex)
+//         {
+//             Console.WriteLine("Error loading file: " + ex.Message);
+//         }
+//     }
 
-    static void ViewEntryInDocx(Journal journal)
-    {
-        Console.Write("Enter the date of the entry you want to view (yyyy-MM-dd): ");
-        string date = Console.ReadLine();
-        JournalEntry entry = journal.FindEntryByDate(date);
+//     static void ViewEntryInDocx(Journal journal)
+//     {
+//         Console.Write("Enter the date of the entry you want to view (yyyy-MM-dd): ");
+//         string date = Console.ReadLine();
+//         JournalEntry entry = journal.FindEntryByDate(date);
 
-        if (entry != null)
-        {
-            Console.Write("Enter the filename to save the entry as a .docx file: ");
-            string filename = Console.ReadLine();
-            JournalViewer.ShowEntryInDocx(entry, filename);
-            Console.WriteLine("Entry saved as a .docx file.");
-        }
-        else
-        {
-            Console.WriteLine("No entry found for the specified date.");
-        }
-    }
-}
+//         if (entry != null)
+//         {
+//             Console.Write("Enter the filename to save the entry as a .docx file: ");
+//             string filename = Console.ReadLine();
+//             JournalViewer.ShowEntryInDocx(entry, filename);
+//             Console.WriteLine("Entry saved as a .docx file.");
+//         }
+//         else
+//         {
+//             Console.WriteLine("No entry found for the specified date.");
+//         }
+//     }
+// }
 
