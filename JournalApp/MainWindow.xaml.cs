@@ -45,13 +45,13 @@ namespace JournalApp
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             string journalFilePath = GetJournalFilePath();
-            string journalContent = JournalEntryTextBox.Text;
+            string journalContent = journalEntryTextBox.Text;
 
             File.WriteAllText(journalFilePath, journalContent);
             MessageBox.Show("Journal entry saved successfully.", "Journal Saved", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            JournalEntryTextBox.Clear();
+            journalEntryTextBox.Clear();
         }
 
     }
-}
+};
