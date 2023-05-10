@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using IOPath = System.IO.Path;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -28,7 +29,7 @@ namespace JournalApp
         private string GetJournalFilePath()
         {
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string journalDirectory = Path.Combine(documentsPath, "JournalApp");
+            string journalDirectory = IOPath.Combine(documentsPath, "JournalApp");
 
             if (!Directory.Exists(journalDirectory))
             {
@@ -37,7 +38,7 @@ namespace JournalApp
 
             int entryNumber = Directory.GetFiles(journalDirectory).Length + 1;
             string journalFileName = $"JournalEntry_{entryNumber}.txt";
-            string journalFilePath = Path.Combine(journalDirectory, journalFileName);
+            string journalFilePath = IOPath.Combine(journalDirectory, journalFileName);
 
             return journalFilePath;
         }
