@@ -250,5 +250,19 @@
             "stopAtEntry": false
         },
 
+        {
+            "name": "JournalApp",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-JournalApp",
+            "program": "${workspaceFolder}/JournalApp/bin/Debug/net7.0/JournalApp.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/JournalApp",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "stopAtEntry": false
+        },
+        
+
     ]
 }
