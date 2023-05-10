@@ -7,6 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <TextBlock x:Name="dateAndEntryNumberTextBlock" Grid.Row="0" Margin="10" FontSize="16" FontWeight="Bold"/>
+
+        <TextBox x:Name="journalEntryTextBox" Grid.Row="1" Margin="10" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
+
+        <Button x:Name="saveButton" Grid.Row="2" Content="Save Journal Entry" Margin="10" Padding="10,5" Click="SaveButton_Click"/>
     </Grid>
 </Window>
