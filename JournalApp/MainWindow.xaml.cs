@@ -28,6 +28,36 @@ namespace JournalApp
             AddToStartup();
         }
 
+        private void AddToStartup()
+        {
+            try
+            {
+                string taskName = "ThoughtLog";
+                string appPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+                using (Microsoft.Win32.TaskScheduler.TaskService ts = new Microsoft.Win32.TaskScheduler.TaskService())
+                {
+                    Microsoft.Win32.TaskScheduler.Task task = ts.FindTask(taskName);
+                    if (task == null)
+        {
+                    Microsoft.Win32.TaskScheduler.TaskDefinition td = ts.NewTask();
+                    td.RegistrationInfo.Description = "Starts my app when the user logs in";
+
+                    td.Triggers.Add(new Microsoft.Win32.TaskScheduler.LogonTrigger());
+
+                    td.Actions.Add(new Microsoft.Win32.TaskScheduler.ExecAction(appPath, null, null));
+
+                    ts.RootFolder.RegisterTaskDefinition(taskName, td);
+        }
+                }
+            }
+                catch (Exception ex)
+            {
+                // Log the exception or show a message box
+                System.Windows.MessageBox.Show(ex.ToString());
+            }
+        }
+
         private string GetJournalFilePath()
         {
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -53,28 +83,6 @@ namespace JournalApp
             MessageBox.Show("Journal entry saved successfully.", "Journal Saved", MessageBoxButton.OK, MessageBoxImage.Information);
 
             journalEntryTextBox.Clear();
-        }
-
-        private void AddToStartup()
-        {
-            string taskName = "MyAppStartup";
-            string appPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-
-            using (Microsoft.Win32.TaskScheduler.TaskService ts = new Microsoft.Win32.TaskScheduler.TaskService())
-            {       
-                Microsoft.Win32.TaskScheduler.Task task = ts.FindTask(taskName);
-                if (task == null)
-                {
-                Microsoft.Win32.TaskScheduler.TaskDefinition td = ts.NewTask();
-                td.RegistrationInfo.Description = "Starts my app when the user logs in";
-
-                td.Triggers.Add(new Microsoft.Win32.TaskScheduler.LogonTrigger());
-
-                td.Actions.Add(new Microsoft.Win32.TaskScheduler.ExecAction(appPath, null, null));
-
-                ts.RootFolder.RegisterTaskDefinition(taskName, td);
-                }
-            }
         }
     }
 };
