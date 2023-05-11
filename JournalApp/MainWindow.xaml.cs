@@ -25,7 +25,9 @@ namespace JournalApp
         public MainWindow()
         {
             InitializeComponent();
+            AddToStartup();
         }
+
         private string GetJournalFilePath()
         {
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -53,5 +55,26 @@ namespace JournalApp
             journalEntryTextBox.Clear();
         }
 
+        private void AddToStartup()
+        {
+            string taskName = "MyAppStartup";
+            string appPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+            using (Microsoft.Win32.TaskScheduler.TaskService ts = new Microsoft.Win32.TaskScheduler.TaskService())
+            {       
+                Microsoft.Win32.TaskScheduler.Task task = ts.FindTask(taskName);
+                if (task == null)
+                {
+                Microsoft.Win32.TaskScheduler.TaskDefinition td = ts.NewTask();
+                td.RegistrationInfo.Description = "Starts my app when the user logs in";
+
+                td.Triggers.Add(new Microsoft.Win32.TaskScheduler.LogonTrigger());
+
+                td.Actions.Add(new Microsoft.Win32.TaskScheduler.ExecAction(appPath, null, null));
+
+                ts.RootFolder.RegisterTaskDefinition(taskName, td);
+                }
+            }
+        }
     }
 };
