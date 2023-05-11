@@ -255,7 +255,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build-JournalApp",
-            "program": "${workspaceFolder}/JournalApp/bin/Debug/net7.0/JournalApp.dll",
+            "program": "C:/Users/offic/OneDrive/Documents/GitHub/cse210-projects/JournalApp",
             "args": [],
             "cwd": "${workspaceFolder}/JournalApp",
             "console": "integratedTerminal",
