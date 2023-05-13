@@ -13,10 +13,23 @@ namespace JournalApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string journalDirectory;
+
         public MainWindow()
         {
             InitializeComponent();
             AddToStartup();
+
+            // Create journal directory if it doesn't exist
+            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            journalDirectory = IOPath.Combine(documentsPath, "JournalApp");
+            if (!Directory.Exists(journalDirectory))
+            {
+                Directory.CreateDirectory(journalDirectory);
+            }
+
+            // Display date, time, and entry number
+            UpdateInfoTextBlock();
         }
 
         private void AddToStartup()
@@ -40,23 +53,22 @@ namespace JournalApp
             }
         }
 
+        private void UpdateInfoTextBlock()
+        {
+            int entryNumber = Directory.GetFiles(journalDirectory).Length + 1;
+            string dateTimeNow = DateTime.Now.ToString();
+            infoTextBlock.Text = $"Date & Time: {dateTimeNow}\nJournal Entry Number: {entryNumber}";
+        }
+
         private string GetJournalFilePath()
         {
-            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string journalDirectory = IOPath.Combine(documentsPath, "JournalApp");
-
-            if (!Directory.Exists(journalDirectory))
-            {
-                Directory.CreateDirectory(journalDirectory);
-            }
-
             int entryNumber = Directory.GetFiles(journalDirectory).Length + 1;
             string journalFileName = $"JournalEntry_{entryNumber}.txt";
             string journalFilePath = IOPath.Combine(journalDirectory, journalFileName);
 
             return journalFilePath;
         }
-        
+
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             string journalFilePath = GetJournalFilePath();
@@ -66,6 +78,9 @@ namespace JournalApp
             MessageBox.Show("Journal entry saved successfully.", "Journal Saved", MessageBoxButton.OK, MessageBoxImage.Information);
 
             journalEntryTextBox.Clear();
+
+            // Update date, time, and entry number
+            UpdateInfoTextBlock();
         }
     }
 };
