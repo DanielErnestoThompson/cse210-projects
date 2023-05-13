@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using IOPath = System.IO.Path;
 using System.Windows;
 using System.Reflection;
@@ -14,6 +15,7 @@ namespace JournalApp
     public partial class MainWindow : Window
     {
         private string journalDirectory;
+        private PromptGenerator promptGenerator;
 
         public MainWindow()
         {
@@ -28,8 +30,11 @@ namespace JournalApp
                 Directory.CreateDirectory(journalDirectory);
             }
 
-            // Display date, time, and entry number
-            UpdateInfoTextBlock();
+            // Initialize prompt generator
+            promptGenerator = new PromptGenerator();
+
+            // Display date, time, entry number, and a writing prompt
+            UpdateInfoTextBlockAndJournalEntryTextBox();
         }
 
         private void AddToStartup()
@@ -53,11 +58,13 @@ namespace JournalApp
             }
         }
 
-        private void UpdateInfoTextBlock()
+        private void UpdateInfoTextBlockAndJournalEntryTextBox()
         {
             int entryNumber = Directory.GetFiles(journalDirectory).Length + 1;
             string dateTimeNow = DateTime.Now.ToString();
+            string prompt = promptGenerator.GetRandomPrompt();
             infoTextBlock.Text = $"Date & Time: {dateTimeNow}\nJournal Entry Number: {entryNumber}";
+            journalEntryTextBox.Text = $"Prompt: {prompt}\n";
         }
 
         private string GetJournalFilePath()
@@ -79,8 +86,35 @@ namespace JournalApp
 
             journalEntryTextBox.Clear();
 
-            // Update date, time, and entry number
-            UpdateInfoTextBlock();
+            // Update date, time, entry number, and a writing prompt
+            UpdateInfoTextBlockAndJournalEntryTextBox();
         }
     }
-};
+
+    public class PromptGenerator
+    {
+        private readonly List<string> prompts;
+        private readonly Random rng;
+
+        public PromptGenerator()
+        {
+            rng = new Random();
+
+            prompts = new List<string>
+            {
+                "What was the best part of your day?",
+                "Describe a challenge you faced today.",
+                "Write about something you learned today.",
+                "How did you make someone else happy today?",
+                "What's something you're looking forward to?",
+                // Add as many prompts as you like...
+            };
+        }
+
+        public string GetRandomPrompt()
+        {
+            int index = rng.Next(prompts.Count);
+            return prompts[index];
+        }
+    }
+}
