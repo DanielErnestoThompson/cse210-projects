@@ -13,7 +13,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="dateAndEntryNumberTextBlock" Grid.Row="0" Margin="10" FontSize="16" FontWeight="Bold"/>
+        <TextBlock x:Name="infoTextBlock" Grid.Row="0" Margin="10" FontSize="16" FontWeight="Bold"/>
 
         <TextBox x:Name="journalEntryTextBox" Grid.Row="1" Margin="10" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
 
