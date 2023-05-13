@@ -3,8 +3,8 @@ using System.IO;
 using IOPath = System.IO.Path;
 using System.Windows;
 using System.Reflection;
-using Microsoft.Win32.TaskScheduler;
 using System.Windows.Controls;
+using Microsoft.Win32;
 
 namespace JournalApp
 {
@@ -21,31 +21,22 @@ namespace JournalApp
 
         private void AddToStartup()
         {
-            try
-            {
-                string taskName = "ThoughtLog";
-                string appPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string runKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
+            string appName = "ThoughtLog";
+            string appPath = Assembly.GetExecutingAssembly().Location;
 
-                using (Microsoft.Win32.TaskScheduler.TaskService ts = new Microsoft.Win32.TaskScheduler.TaskService())
+            using (RegistryKey runKey = Registry.CurrentUser.OpenSubKey(runKeyPath, writable: true))
+            {
+                if (runKey == null)
                 {
-                    Microsoft.Win32.TaskScheduler.Task task = ts.FindTask(taskName);
-                    if (task == null)
-        {
-                    Microsoft.Win32.TaskScheduler.TaskDefinition td = ts.NewTask();
-                    td.RegistrationInfo.Description = "Starts my app when the user logs in";
-
-                    td.Triggers.Add(new Microsoft.Win32.TaskScheduler.LogonTrigger());
-
-                    td.Actions.Add(new Microsoft.Win32.TaskScheduler.ExecAction(appPath, null, null));
-
-                    ts.RootFolder.RegisterTaskDefinition(taskName, td);
-        }
+                    MessageBox.Show("Unable to open registry key.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
-            }
-                catch (Exception ex)
-            {
-                // Log the exception or show a message box
-                System.Windows.MessageBox.Show(ex.ToString());
+
+                if (runKey.GetValue(appName) as string != appPath)
+                {
+                    runKey.SetValue(appName, appPath);
+                }
             }
         }
 
@@ -65,6 +56,7 @@ namespace JournalApp
 
             return journalFilePath;
         }
+        
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             string journalFilePath = GetJournalFilePath();
