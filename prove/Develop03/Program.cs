@@ -94,28 +94,38 @@ class Reference
 
     private void ParseReference()
     {
-        // Split the reference string into book, chapter, and verse(s)
         string[] parts = referenceString.Split(':');
 
-        book = parts[0];
-
-        // Parse chapter
-        int chapterNumber;
-        if (int.TryParse(parts[1].Split(' ')[0], out chapterNumber))
+        if (parts.Length == 2)
         {
-            chapter = chapterNumber;
-        }
+            book = parts[0];
+            string[] chapterVerse = parts[1].Split(' ');
 
-        // Parse verse(s)
-        verses = new List<int>();
-        string[] verseParts = parts[1].Split(' ')[1].Split(',');
-        foreach (string versePart in verseParts)
-        {
-            int verseNumber;
-            if (int.TryParse(versePart, out verseNumber))
+            int chapterNumber;
+            if (int.TryParse(chapterVerse[0], out chapterNumber))
             {
-                verses.Add(verseNumber);
+                chapter = chapterNumber;
             }
+
+            if (chapterVerse.Length > 1)
+            {
+                string[] verseParts = chapterVerse[1].Split(',');
+                verses = new List<int>();
+
+                foreach (string versePart in verseParts)
+                {
+                    int verseNumber;
+                    if (int.TryParse(versePart, out verseNumber))
+                    {
+                        verses.Add(verseNumber);
+                    }
+                }
+            }
+        }
+        else
+        {
+            // Handle invalid reference format
+            Console.WriteLine("Invalid reference format: " + referenceString);
         }
     }
 
