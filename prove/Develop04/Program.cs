@@ -35,7 +35,11 @@ namespace JournalApp
         {
             foreach (Entry entry in entries)
             {
-                Console.WriteLine($"Date: {entry.Date}");
+                if (entry.ShowDate)
+                {
+                    Console.WriteLine($"Date: {entry.Date}");
+                }
+
                 Console.WriteLine($"Prompt: {entry.Prompt}");
                 Console.WriteLine($"Content: {entry.Content}\n");
             }
@@ -67,7 +71,7 @@ namespace JournalApp
                     DateTime date = DateTime.Parse(line);
                     string prompt = reader.ReadLine();
                     string content = reader.ReadLine();
-                    entries.Add(new Entry(content, date, prompt));
+                    entries.Add(new Entry(content, date, prompt, false));
                     reader.ReadLine(); // Skip empty line
                 }
             }
@@ -85,12 +89,14 @@ namespace JournalApp
         public string Content { get; }
         public DateTime Date { get; }
         public string Prompt { get; }
+        public bool ShowDate { get; }
 
-        public Entry(string content, DateTime date, string prompt)
+        public Entry(string content, DateTime date, string prompt, bool showDate = true)
         {
             Content = content;
             Date = date;
             Prompt = prompt;
+            ShowDate = showDate;
         }
     }
 
