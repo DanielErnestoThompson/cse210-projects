@@ -41,9 +41,6 @@ class Program
     }
 }
 
-// Rest of the classes remain the same...
-
-
 class ScriptureLibrary
 {
     private List<Scripture> scriptures;
