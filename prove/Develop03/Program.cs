@@ -8,7 +8,9 @@ class Program
         ScriptureLibrary library = new ScriptureLibrary();
         ProgressTracker tracker = new ProgressTracker();
 
-        while (true)
+        bool exitProgram = false;
+
+        while (!exitProgram)
         {
             Scripture scripture = library.GetRandomScripture();
             tracker.RecordAttempt(scripture);
@@ -22,18 +24,25 @@ class Program
 
                 if (input == "quit")
                 {
+                    if (scripture.AreAllWordsHidden())
+                        tracker.RecordSuccess(scripture);
+
                     tracker.ReportProgress(scripture);
+                    exitProgram = true;
                     break;
                 }
 
                 scripture.HideRandomWords();
             }
 
-            if (scripture.AreAllWordsHidden())
+            if (!exitProgram && scripture.AreAllWordsHidden())
                 tracker.RecordSuccess(scripture);
         }
     }
 }
+
+// Rest of the classes remain the same...
+
 
 class ScriptureLibrary
 {
