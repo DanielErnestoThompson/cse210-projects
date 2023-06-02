@@ -1,4 +1,4 @@
-@startuml diagram_name
+@startuml LearningDiagram04
 
 class Assignment {
   - _studentName: string
