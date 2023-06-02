@@ -1,0 +1,26 @@
+@startuml diagram_name
+
+class Assignment {
+  - _studentName: string
+  - _topic: string
+  + Assignment(studentName: string, topic: string)
+  + GetSummary(): string
+}
+
+class MathAssignment {
+  - _textbookSection: string
+  - _problems: string
+  + MathAssignment(studentName: string, topic: string, textbookSection: string, problems: string)
+  + GetHomeworkList(): string
+}
+
+class WritingAssignment {
+  - _title: string
+  + WritingAssignment(studentName: string, topic: string, title: string)
+  + GetWritingInformation(): string
+}
+
+Assignment <|-- MathAssignment
+Assignment <|-- WritingAssignment
+
+@enduml
