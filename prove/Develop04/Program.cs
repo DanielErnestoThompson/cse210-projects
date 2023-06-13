@@ -1,121 +1,186 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Threading;
 
-namespace JournalApp
+public abstract class MindfulnessActivity
 {
-    public class Journal
+    protected int DurationInSeconds { get; set; }
+    protected string ActivityName { get; set; }
+    protected string Description { get; set; }
+
+    public MindfulnessActivity(int durationInSeconds)
     {
-        private List<Entry> entries;
-        private Random random;
-        private List<string> prompts;
+        DurationInSeconds = durationInSeconds;
+    }
 
-        public Journal()
+    protected void StartActivity()
+    {
+        Console.WriteLine($"Starting {ActivityName}...");
+        Console.WriteLine($"{Description}");
+        Console.WriteLine($"The activity will last for {DurationInSeconds} seconds.");
+        Console.WriteLine("Prepare to begin...");
+        ShowCountdown(5);
+    }
+
+    protected void EndActivity()
+    {
+        Console.WriteLine($"Good job! You have completed the {ActivityName} for {DurationInSeconds} seconds.");
+        ShowCountdown(5);
+    }
+
+    protected void ShowCountdown(int seconds)
+    {
+        for (int i = seconds; i >= 0; i--)
         {
-            entries = new List<Entry>();
-            random = new Random();
-            prompts = new List<string>
-            {
-                "What was the best part of your day?",
-                "Describe a challenge you faced today.",
-                "Write about something you learned today.",
-                "How did you make someone else happy today?",
-                "What's something you're looking forward to?",
-                // Add as many prompts as you like...
-            };
-        }
-
-        public void WriteEntry(string content)
-        {
-            Entry entry = new Entry(content, DateTime.Now, GetRandomPrompt());
-            entries.Add(entry);
-        }
-
-        public void DisplayEntries()
-        {
-            foreach (Entry entry in entries)
-            {
-                if (entry.ShowDate)
-                {
-                    Console.WriteLine($"Date: {entry.Date}");
-                }
-
-                Console.WriteLine($"Prompt: {entry.Prompt}");
-                Console.WriteLine($"Content: {entry.Content}\n");
-            }
-        }
-
-        public void SaveJournal(string filePath)
-        {
-            using (StreamWriter writer = new StreamWriter(filePath))
-            {
-                foreach (Entry entry in entries)
-                {
-                    writer.WriteLine(entry.Date);
-                    writer.WriteLine(entry.Prompt);
-                    writer.WriteLine(entry.Content);
-                    writer.WriteLine();
-                }
-            }
-        }
-
-        public void LoadJournal(string filePath)
-        {
-            entries.Clear();
-            
-            using (StreamReader reader = new StreamReader(filePath))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    DateTime date = DateTime.Parse(line);
-                    string prompt = reader.ReadLine();
-                    string content = reader.ReadLine();
-                    entries.Add(new Entry(content, date, prompt, false));
-                    reader.ReadLine(); // Skip empty line
-                }
-            }
-        }
-
-        private string GetRandomPrompt()
-        {
-            int index = random.Next(prompts.Count);
-            return prompts[index];
+            Console.WriteLine(i + "..."); 
+            Thread.Sleep(1000);
         }
     }
 
-    public class Entry
-    {
-        public string Content { get; }
-        public DateTime Date { get; }
-        public string Prompt { get; }
-        public bool ShowDate { get; }
+    public abstract void PerformActivity();
+}
 
-        public Entry(string content, DateTime date, string prompt, bool showDate = true)
-        {
-            Content = content;
-            Date = date;
-            Prompt = prompt;
-            ShowDate = showDate;
-        }
+public class BreathingActivity : MindfulnessActivity
+{
+    public BreathingActivity(int durationInSeconds) : base(durationInSeconds)
+    {
+        ActivityName = "Breathing Activity";
+        Description = "This activity will help you relax by walking your through breathing in and out slowly.";
     }
 
-    class Program
+    public override void PerformActivity()
     {
-        static void Main(string[] args)
+        StartActivity();
+        DateTime startTime = DateTime.Now;
+        while ((DateTime.Now - startTime).TotalSeconds < DurationInSeconds)
         {
-            Journal journal = new Journal();
-            string filePath = "journal.txt";
-
-            // Example usage
-            journal.WriteEntry("This is my journal entry.");
-            journal.WriteEntry("Another entry for today.");
-            journal.SaveJournal(filePath);
-            journal.DisplayEntries();
-
-            // Load and display entries from the saved journal
-            journal.LoadJournal(filePath);
-            journal.DisplayEntries();
+            Console.WriteLine("Breathe in...");
+            ShowCountdown(2);
+            Console.WriteLine("Breathe out...");
+            ShowCountdown(2);
         }
+        EndActivity();
+    }
+}
+
+public class ReflectionActivity : MindfulnessActivity
+{
+    private List<string> _reflectionPrompts;
+    private Random _random;
+
+    public ReflectionActivity(int durationInSeconds) : base(durationInSeconds)
+    {
+        ActivityName = "Reflection Activity";
+        Description = "This activity will help you reflect on times in your life when you have shown strength and resilience.";
+        _reflectionPrompts = new List<string> 
+        { 
+            "Think of a time when you stood up for someone else.",
+            "Think of a time when you did something really difficult.",
+            "Think of a time when you helped someone in need."
+        };
+        _random = new Random();
+    }
+
+    public override void PerformActivity()
+    {
+        StartActivity();
+        DateTime startTime = DateTime.Now;
+        while ((DateTime.Now - startTime).TotalSeconds < DurationInSeconds)
+        {
+            int promptIndex = _random.Next(_reflectionPrompts.Count);
+            Console.WriteLine(_reflectionPrompts[promptIndex]);
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
+        EndActivity();
+    }
+}
+
+public class ListingActivity : MindfulnessActivity
+{
+    private List<string> _listingPrompts;
+    private Random _random;
+
+    public ListingActivity(int durationInSeconds) : base(durationInSeconds)
+    {
+        ActivityName = "Listing Activity";
+        Description = "This activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.";
+        _listingPrompts = new List<string>
+        {
+            "Who are people that you appreciate?",
+            "What are personal strengths of yours?",
+            "Who are people that you have helped this week?"
+        };
+        _random = new Random();
+    }
+
+    public override void PerformActivity()
+    {
+        StartActivity();
+        DateTime startTime = DateTime.Now;
+        while ((DateTime.Now - startTime).TotalSeconds < DurationInSeconds)
+        {
+            int promptIndex = _random.Next(_listingPrompts.Count);
+            Console.WriteLine(_listingPrompts[promptIndex]);
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
+        EndActivity();
+    }
+}
+
+class MindfulnessApp
+{
+    public void Run()
+    {
+        int userChoice;
+        int duration;
+
+        while (true)
+        {
+            Console.WriteLine("Welcome to the Mindfulness App. Choose an activity:\n1. Breathing\n2. Reflection\n3. Listing\n0. Exit");
+            userChoice = int.Parse(Console.ReadLine());
+
+            switch (userChoice)
+            {
+                case 1:
+                    Console.WriteLine("Enter the duration in seconds for the Breathing activity:");
+                    duration = int.Parse(Console.ReadLine());
+                    BreathingActivity ba = new BreathingActivity(duration);
+                    ba.PerformActivity();
+                    break;
+
+                case 2:
+                    Console.WriteLine("Enter the duration in seconds for the Reflection activity:");
+                    duration = int.Parse(Console.ReadLine());
+                    ReflectionActivity ra = new ReflectionActivity(duration);
+                    ra.PerformActivity();
+                    break;
+
+                case 3:
+                    Console.WriteLine("Enter the duration in seconds for the Listing activity:");
+                    duration = int.Parse(Console.ReadLine());
+                    ListingActivity la = new ListingActivity(duration);
+                    la.PerformActivity();
+                    break;
+
+                case 0:
+                    Console.WriteLine("Goodbye!");
+                    return;
+
+                default:
+                    Console.WriteLine("Invalid option! Try again.");
+                    break;
+            }
+        }
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        MindfulnessApp app = new MindfulnessApp();
+        app.Run();
     }
 }
