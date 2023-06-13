@@ -29,11 +29,11 @@ public class Journal
     {
         entries = new List<Entry>();
         prompts = new List<string>(){
-            "Who was the most interesting person I interacted with today?",
-            "What was the best part of my day?",
-            "How did I see the hand of the Lord in my life today?",
-            "What was the strongest emotion I felt today?",
-            "If I had one thing I could do over today, what would it be?"
+            "What did I learn from those I interacted with today?",
+            "What am I grateful for today?",
+            "When and where did I see the Lord in my life today?",
+            "What did I accomplish today?",
+            "What do I need to work on for tomorrow?"
         };
     }
 
