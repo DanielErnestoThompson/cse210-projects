@@ -8,12 +8,14 @@ public class Entry
     public string Prompt { get; }
     public string Response { get; }
     public string Date { get; }
+    public string Category { get; }
 
-    public Entry(string prompt, string response, string date)
+    public Entry(string prompt, string response, string date, string category)
     {
         Prompt = prompt;
         Response = response;
         Date = date;
+        Category = category;
     }
 }
 
@@ -27,11 +29,11 @@ public class Journal
     {
         entries = new List<Entry>();
         prompts = new List<string>(){
-            "What did I learn from those I interacted with today?",
-            "What am I grateful for today?",
-            "When and where did I see the Lord in my life today?",
-            "What did I accomplish today?",
-            "What do I need to work on for tomorrow?"
+            "Who was the most interesting person I interacted with today?",
+            "What was the best part of my day?",
+            "How did I see the hand of the Lord in my life today?",
+            "What was the strongest emotion I felt today?",
+            "If I had one thing I could do over today, what would it be?"
         };
     }
 
@@ -43,14 +45,28 @@ public class Journal
         var response = Console.ReadLine();
         var date = DateTime.Now.ToString();
 
-        entries.Add(new Entry(prompt, response, date));
+        Console.WriteLine("Please enter a category for this entry:");
+        var category = Console.ReadLine();
+
+        entries.Add(new Entry(prompt, response, date, category));
     }
 
     public void DisplayEntries()
     {
         foreach (var entry in entries)
         {
-            Console.WriteLine($"{entry.Date} - {entry.Prompt} - {entry.Response}");
+            Console.WriteLine($"{entry.Date} - {entry.Prompt} - {entry.Response} - Category: {entry.Category}");
+        }
+    }
+
+    public void DisplayEntriesByCategory(string category)
+    {
+        foreach (var entry in entries)
+        {
+            if (entry.Category == category)
+            {
+                Console.WriteLine($"{entry.Date} - {entry.Prompt} - {entry.Response} - Category: {entry.Category}");
+            }
         }
     }
 
@@ -60,7 +76,7 @@ public class Journal
         {
             foreach (var entry in entries)
             {
-                writer.WriteLine($"{entry.Date}~|~{entry.Prompt}~|~{entry.Response}");
+                writer.WriteLine($"{entry.Date}~|~{entry.Prompt}~|~{entry.Response}~|~{entry.Category}");
             }
         }
     }
@@ -75,7 +91,7 @@ public class Journal
             while ((line = reader.ReadLine()) != null)
             {
                 var parts = line.Split("~|~");
-                entries.Add(new Entry(parts[1], parts[2], parts[0]));
+                entries.Add(new Entry(parts[1], parts[2], parts[0], parts[3]));
             }
         }
     }
@@ -90,7 +106,7 @@ public class Program
 
         while (true)
         {
-            Console.WriteLine("1. Add entry\n2. Display entries\n3. Save to file\n4. Load from file\n5. Exit");
+            Console.WriteLine("1. Add entry\n2. Display entries\n3. Display entries by category\n4. Save to file\n5. Load from file\n6. Exit");
             var choice = Console.ReadLine();
 
             switch (choice)
@@ -102,16 +118,21 @@ public class Program
                     journal.DisplayEntries();
                     break;
                 case "3":
+                    Console.WriteLine("Enter category:");
+                    var category = Console.ReadLine();
+                    journal.DisplayEntriesByCategory(category);
+                    break;
+                case "4":
                     Console.WriteLine("Enter filename to save:");
                     var saveFilename = Console.ReadLine();
                     journal.SaveToFile(saveFilename);
                     break;
-                case "4":
+                case "5":
                     Console.WriteLine("Enter filename to load:");
                     var loadFilename = Console.ReadLine();
                     journal.LoadFromFile(loadFilename);
                     break;
-                case "5":
+                case "6":
                     return;
             }
         }
