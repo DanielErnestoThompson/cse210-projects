@@ -37,20 +37,46 @@ public class Journal
         };
     }
 
-    public void AddEntry()
+public void AddEntry()
+{
+    var prompt = prompts[new Random().Next(prompts.Count)];
+    Console.WriteLine(prompt);
+
+    var response = Console.ReadLine();
+    var date = DateTime.Now.ToString();
+
+    // Predefined list of categories
+    List<string> categories = new List<string>()
     {
-        var prompt = prompts[new Random().Next(prompts.Count)];
-        Console.WriteLine(prompt);
+        "Work",
+        "Family",
+        "Leisure",
+        "Health",
+        "Education"
+    };
 
-        var response = Console.ReadLine();
-        var date = DateTime.Now.ToString();
+    int categoryIndex = -1;
+    while (categoryIndex < 0 || categoryIndex >= categories.Count)
+    {
+        Console.WriteLine("Please select a category for this entry:");
+        for (int i = 0; i < categories.Count; i++)
+        {
+            Console.WriteLine($"{i+1}. {categories[i]}");
+        }
 
-        Console.WriteLine("Please enter a category for this entry:");
-        var category = Console.ReadLine();
-
-        entries.Add(new Entry(prompt, response, date, category));
+        if (!int.TryParse(Console.ReadLine(), out categoryIndex) || categoryIndex < 1 || categoryIndex > categories.Count)
+        {
+            Console.WriteLine("Invalid input. Please enter a number corresponding to one of the categories.");
+            categoryIndex = -1;  // Reset categoryIndex for the next iteration
+        }
+        else
+        {
+            categoryIndex--;  // Convert from 1-based to 0-based index
+        }
     }
 
+    entries.Add(new Entry(prompt, response, date, categories[categoryIndex]));
+}
     public void DisplayEntries()
     {
         foreach (var entry in entries)
