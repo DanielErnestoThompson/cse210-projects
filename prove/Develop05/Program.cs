@@ -1,9 +1,17 @@
+using System;
+
 public class Program
 {
     static User currentUser;
+    static List<string> quotes;
+
     static void Main(string[] args)
     {
         currentUser = new User("John Doe");
+        quotes = LoadQuotes("quotes.txt");
+
+        // Display a random quote at the start
+        DisplayRandomQuote();
 
         // Load goals from file (if available)
         currentUser.LoadGoals("goals.txt");
@@ -51,9 +59,35 @@ public class Program
         currentUser.SaveGoals("goals.txt");
     }
 
+    private static List<string> LoadQuotes(string filePath)
+    {
+        if (File.Exists(filePath))
+        {
+            return File.ReadAllLines(filePath).ToList();
+        }
+        else
+        {
+            Console.WriteLine("Quotes file not found.");
+            return new List<string>();
+        }
+    }
+
+    private static void DisplayRandomQuote()
+    {
+        if (quotes.Count > 0)
+        {
+            Random random = new Random();
+            int index = random.Next(quotes.Count);
+            Console.WriteLine("Inspirational Quote:");
+            Console.WriteLine(quotes[index]);
+            Console.WriteLine();
+        }
+    }
 
     private static void CreateGoal()
     {
+        DisplayRandomQuote(); // Display an inspirational quote
+
         Console.WriteLine("Enter goal description:");
         string description = Console.ReadLine();
 
