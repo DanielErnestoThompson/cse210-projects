@@ -118,37 +118,50 @@ public class User
 public class Program
 {
     static User currentUser;
-    static void Main(string[] args)
+static void Main(string[] args)
+{
+    currentUser = new User("John Doe");
+
+    int option;
+    do
     {
-        currentUser = new User("John Doe");
+        Console.Clear();
+        Console.WriteLine("Eternal Quest");
+        Console.WriteLine("1. Create a new goal");
+        Console.WriteLine("2. Mark a goal as complete");
+        Console.WriteLine("3. Display goals and score");
+        Console.WriteLine("4. Exit");
 
-        int option;
-        do
+        Console.Write("Enter an option: ");
+        var input = Console.ReadLine();
+        if (!int.TryParse(input, out option))
         {
-            Console.Clear();
-            Console.WriteLine("Eternal Quest");
-            Console.WriteLine("1. Create a new goal");
-            Console.WriteLine("2. Mark a goal as complete");
-            Console.WriteLine("3. Display goals and score");
-            Console.WriteLine("4. Exit");
-            Console.Write("Enter an option: ");
-            option = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Invalid option. Please enter a number between 1 and 4.");
+            continue;
+        }
 
-            switch (option)
-            {
-                case 1:
-                    CreateGoal();
-                    break;
-                case 2:
-                    MarkGoalComplete();
-                    break;
-                case 3:
-                    DisplayGoalsAndScore();
-                    break;
-            }
+        switch (option)
+        {
+            case 1:
+                CreateGoal();
+                break;
+            case 2:
+                MarkGoalComplete();
+                break;
+            case 3:
+                DisplayGoalsAndScore();
+                break;
+            case 4:
+                Console.WriteLine("Exiting...");
+                break;
+            default:
+                Console.WriteLine("Invalid option. Please enter a number between 1 and 4.");
+                break;
+        }
 
-        } while (option != 4);
-    }
+    } while (option != 4);
+}
+
 
     private static void CreateGoal()
     {
