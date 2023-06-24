@@ -1,16 +1,16 @@
+
 public class BreathingActivity : MindfulnessActivity
 {
-    public BreathingActivity(int durationInSeconds) : base(durationInSeconds)
+    public BreathingActivity(int durationInSeconds) 
+        : base(durationInSeconds, "Breathing Activity", "This activity will help you relax by walking you through breathing in and out slowly.")
     {
-        ActivityName = "Breathing Activity";
-        Description = "This activity will help you relax by walking your through breathing in and out slowly.";
     }
 
     public override void PerformActivity()
     {
         StartActivity();
         DateTime startTime = DateTime.Now;
-        while ((DateTime.Now - startTime).TotalSeconds < DurationInSeconds)
+        while ((DateTime.Now - startTime).TotalSeconds < _durationInSeconds)
         {
             Console.WriteLine("Breathe in...");
             ShowCountdown(2);
@@ -20,3 +20,4 @@ public class BreathingActivity : MindfulnessActivity
         EndActivity();
     }
 }
+

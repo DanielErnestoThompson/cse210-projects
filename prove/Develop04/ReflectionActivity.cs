@@ -1,12 +1,12 @@
+
 public class ReflectionActivity : MindfulnessActivity
 {
     private List<string> _reflectionPrompts;
     private Random _random;
 
-    public ReflectionActivity(int durationInSeconds) : base(durationInSeconds)
+    public ReflectionActivity(int durationInSeconds) 
+        : base(durationInSeconds, "Reflection Activity", "This activity will help you reflect on times in your life when you have shown strength and resilience.")
     {
-        ActivityName = "Reflection Activity";
-        Description = "This activity will help you reflect on times in your life when you have shown strength and resilience.";
         _reflectionPrompts = new List<string> 
         { 
             "Think of a time when you stood up for someone else.",
@@ -20,7 +20,7 @@ public class ReflectionActivity : MindfulnessActivity
     {
         StartActivity();
         DateTime startTime = DateTime.Now;
-        while ((DateTime.Now - startTime).TotalSeconds < DurationInSeconds)
+        while ((DateTime.Now - startTime).TotalSeconds < _durationInSeconds)
         {
             int promptIndex = _random.Next(_reflectionPrompts.Count);
             Console.WriteLine(_reflectionPrompts[promptIndex]);
